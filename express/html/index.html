@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Registros</title>
+</head>
+<body>
+    <h1>Lista de Registros</h1>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Ações</th>
+        </tr>
+
+        
+        <script>
+            fetch('/ler')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(record => {
+                        const row = document.createElement('tr');
+                        
+                        const idCell = document.createElement('td');
+                        idCell.textContent = record.id;
+                        
+                        const nomeCell = document.createElement('td');
+                        nomeCell.textContent = record.nome;
+                        
+                        const emailCell = document.createElement('td');
+                        emailCell.textContent = record.email;
+                        
+                        const actionsCell = document.createElement('td');
+                        const editarLink = document.createElement('a');
+                        editarLink.href = '/editar/' + record.id;
+                        editarLink.textContent = 'Editar';
+                        const excluirLink = document.createElement('a');
+                        excluirLink.href = '/deletar/' + record.id;
+                        excluirLink.textContent = 'Excluir';
+                        
+                        actionsCell.appendChild(editarLink);
+                        actionsCell.appendChild(document.createTextNode(' | '));
+                        actionsCell.appendChild(excluirLink);
+                        
+                        row.appendChild(idCell);
+                        row.appendChild(nomeCell);
+                        row.appendChild(emailCell);
+                        row.appendChild(actionsCell);
+                        
+                        document.querySelector('table').appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar registros:', error);
+                });
+        </script>
+    </table>
+</body>
+</html>
